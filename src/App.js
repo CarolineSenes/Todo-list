@@ -12,12 +12,16 @@ function App() {
     //met à jour le tableau "toodoList" et ajoute une nouvelle "todo" avec ses propriétés
   }
 
+  function deleteTodo(id){
+    setTodoList(todoList.filter(todo => todo.id !== id))
+  }
+
   return (
     <div className="d-flex justify-content-center align-items-center p-20">
       <div className="card container p-20">
         <h1 className="mb-20">Liste de tâches</h1>
         <AddTodo addTodo={addTodo} />
-        <TodoList />
+        <TodoList todoList={todoList} deleteTodo={deleteTodo}/>
       </div>
     </div>
   );
