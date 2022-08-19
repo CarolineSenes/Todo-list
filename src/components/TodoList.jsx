@@ -6,12 +6,18 @@ export default function TodoList({
   deleteTodo,
   toggleTodo,
   toggleTodoEdit,
+  editTodo,
 }) {
   return todoList.length ? (
     <ul>
       {todoList.map((todo) =>
         todo.edit ? (
-          <EditTodo key={todo.id} todo={todo} />
+          <EditTodo
+            key={todo.id}
+            todo={todo}
+            editTodo={(content) => editTodo(todo.id, content)}
+            cancelEditTodo={() => toggleTodoEdit(todo.id)}
+          />
         ) : (
           <TodoItem
             key={todo.id}
