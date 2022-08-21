@@ -37,7 +37,6 @@ export default function EditTodo({ todo, editTodo, cancelEditTodo }) {
       />
       <Button text="Sauvegarder" className="mr-15" onClick={handleClick} />
       <Button text="Annuler" className="mr-15" onClick={cancelEditTodo} />
-        Annuler
     </div>
   );
 }
