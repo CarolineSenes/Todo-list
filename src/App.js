@@ -1,80 +1,80 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import TodoList from "./components/TodoList";
 import AddTodo from "./components/AddTodo";
 import ThemeContext from "./context/ThemeContext";
+import todoReducer from "./reducers/todoReducer";
 
 function App() {
-  const [todoList, setTodoList] = useState([]);
-  const [theme, setTheme] = useState("primary");
+  /** useReducer() centralise l'état du composant */
+  const [state, dispatch] = useReducer(todoReducer, {
+    // initialState : infos initiales à afficher au 1er rendu
+    todoList: [],
+    theme: "primary",
+  });
 
   function addTodo(content) {
-    //crypto.randomUUID() : génère un id unique de manière native
-    const todo = {
-      id: crypto.randomUUID(),
-      done: false,
-      edit: false,
-      selected: false,
-      content,
-    };
-    setTodoList([...todoList, todo]);
-    //met à jour le tableau "toodoList" et ajoute une nouvelle "todo" avec ses propriétés
+    dispatch({
+      type: 'ADD_TODO',
+      content
+    })
   }
 
   function deleteTodo(id) {
-    setTodoList(todoList.filter((todo) => todo.id !== id));
+    dispatch({
+      type: 'DELETE_TODO',
+      id
+    })
   }
 
   function toggleTodo(id) {
-    setTodoList(
-      todoList.map((todo) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
-      )
-    );
+    dispatch({
+      type: 'TOGGLE_TODO',
+      id
+    })
   }
 
   function toggleTodoEdit(id) {
-    setTodoList(
-      todoList.map((todo) =>
-        todo.id === id ? { ...todo, edit: !todo.edit } : todo
-      )
-    );
+    dispatch({
+      type: 'TOGGLE_EDIT_TODO',
+      id
+    })
   }
 
   function editTodo(id, content) {
-    setTodoList(
-      todoList.map((todo) =>
-        todo.id === id ? { ...todo, edit: false, content } : todo
-      )
-    );
+    dispatch({
+      type: 'EDIT_TODO',
+      id,
+      content
+    })
   }
 
   function selectTodo(id) {
-    setTodoList(
-      todoList.map((todo) =>
-        todo.id === id
-          ? { ...todo, selected: !todo.selected }
-          : { ...todo, selected: false }
-      )
-    );
+    dispatch({
+      type: 'SELECT_TODO',
+      id
+    })
   }
 
-  // Récupère la valeur de l'option du select
-  // et de mettre à jour le state local "theme" grâce à son setter "setTheme"
+  // Récupère la valeur de l'option du select (menu déroulant pour choisir le theme)
+  // et de met à jour le state local "theme" grâce à son setter "setTheme".
   // Mais ce changement de theme n'est applicable pour le moment qu'aux éléments
   // qui l'utiliserait dans le composant présent. Les enfants ne sont pas concernés.
   // En wrappant avec <ThemeContext.Provider>, on modifie la valeur de "theme" dans le Context.
   function handleThemeChange(e) {
-    setTheme(e.target.value);
+    dispatch({
+      type: 'SET_THEME',
+      theme: e.target.value
+    })
   }
 
   return (
-    <ThemeContext.Provider value={theme}>
+    <ThemeContext.Provider value={state.theme}>
       <div className="d-flex justify-content-center align-items-center p-20">
         <div className="card container p-20">
           <h1 className="mb-20 d-flex justify-content-center align-items-center">
             <span className="flex-fill">Liste de tâches</span>
             {/* Select qui permet de changer le theme */}
-            <select value={theme} onChange={handleThemeChange}>
+            <select value={state.theme} onChange={handleThemeChange}>
               <option value="primary">Rouge</option>
               <option value="secondary">Bleu</option>
             </select>
@@ -82,7 +82,7 @@ function App() {
           <AddTodo addTodo={addTodo} />
           {/* On passe les props aux enfants */}
           <TodoList
-            todoList={todoList}
+            todoList={state.todoList}
             deleteTodo={deleteTodo}
             toggleTodo={toggleTodo}
             toggleTodoEdit={toggleTodoEdit}
