@@ -1,3 +1,7 @@
+/**
+ * Le state initial est définit dans App.js
+ */
+
 function todoReducer(state, action) {
   switch (action.type) {
     case "ADD_TODO": {

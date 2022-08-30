@@ -1,29 +1,39 @@
-// On récupère les props passées en prop drilling depuis App.js
-import Button from './Button';
+import React, { useContext } from "react";
 
-export default function TodoItem({
-  todo,
-  deleteTodo,
-  toggleTodo,
-  editTodo,
-  selectTodo,
-}) {
+// On récupère les props passées en prop drilling depuis App.js
+import Button from "./Button";
+
+import { TodoDispatcherContext } from "../context/TodoContext";
+
+// on récupère "todo" (props) de TodoList.jsx
+export default function TodoItem({ todo }) {
+  // on utilise le dispatch centralisé "TodoDispatcherContext"
+  const dispatch = useContext(TodoDispatcherContext);
+
   return (
     <li
-      onClick={selectTodo}
+      onClick={() =>
+        dispatch({
+          type: "SELECT_TODO",
+          id: todo.id,
+        })
+      }
       className={`mb-10 d-flex flex-row justify-content-center align-items-center p-10 ${
-        todo.selected ? 'selected' : ''
+        todo.selected ? "selected" : ""
       }  `}
     >
       <span className="flex-fill">
-        {todo.content} {todo.done && '✅'}
+        {todo.content} {todo.done && "✅"}
       </span>
       <Button
         text="Valider"
         className="mr-15"
         onClick={(e) => {
           e.stopPropagation();
-          toggleTodo();
+          dispatch({
+            type: "TOGGLE_TODO",
+            id: todo.id,
+          });
         }}
       />
       <Button
@@ -31,14 +41,20 @@ export default function TodoItem({
         className="mr-15"
         onClick={(e) => {
           e.stopPropagation();
-          editTodo();
+          dispatch({
+            type: "TOGGLE_EDIT_TODO",
+            id: todo.id,
+          });
         }}
       />
       <Button
         text="Supprimer"
         onClick={(e) => {
           e.stopPropagation();
-          deleteTodo();
+          dispatch({
+            type: "DELETE_TODO",
+            id: todo.id,
+          });
         }}
       />
     </li>

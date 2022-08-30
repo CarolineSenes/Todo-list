@@ -1,33 +1,25 @@
+import { useContext } from 'react';
 import TodoItem from "./TodoItem";
 import EditTodo from "./EditTodo";
+import { TodoStateContext } from '../context/TodoContext';
 
-export default function TodoList({
-  todoList,
-  deleteTodo,
-  toggleTodo,
-  toggleTodoEdit,
-  editTodo,
-  selectTodo
-}) {
-  return todoList.length ? (
+
+export default function TodoList() {
+  // on utilise le state centralisé "TodoStateContext" 
+  const state = useContext(TodoStateContext);
+
+  return state.todoList.length ? (
     <ul>
-      {todoList.map((todo) =>
+      {state.todoList.map((todo) =>
         todo.edit ? (
           <EditTodo
             key={todo.id}
             todo={todo}
-            editTodo={(content) => editTodo(todo.id, content)}
-            cancelEditTodo={() => toggleTodoEdit(todo.id)}
           />
         ) : (
           <TodoItem
-          // On récupère les props de App.js et on les passe à l'enfant TodoItem (prop drilling)
             key={todo.id}
             todo={todo}
-            deleteTodo={() => deleteTodo(todo.id)}
-            toggleTodo={() => toggleTodo(todo.id)}
-            editTodo={() => toggleTodoEdit(todo.id)}
-            selectTodo={() => selectTodo(todo.id)}
           />
         )
       )}
