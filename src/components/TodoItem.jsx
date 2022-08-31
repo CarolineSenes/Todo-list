@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 
 // On récupère les props passées en prop drilling depuis App.js
 import Button from "./Button";
-
-import { TodoDispatcherContext } from "../context/TodoContext";
+import { useTodoDispatcher } from "../context/TodoContext";
 
 // on récupère "todo" (props) de TodoList.jsx
 export default function TodoItem({ todo }) {
-  // on utilise le dispatch centralisé "TodoDispatcherContext"
-  const dispatch = useContext(TodoDispatcherContext);
+  // on utilise useTodoDispatcher pour modifier le state
+  const dispatch = useTodoDispatcher();
 
   return (
     <li

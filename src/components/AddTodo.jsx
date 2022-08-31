@@ -1,13 +1,13 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Button from "./Button";
-import { TodoDispatcherContext } from "../context/TodoContext";
+import { useTodoDispatcher } from "../context/TodoContext";
 
 export default function AddTodo() {
   // state local
   const [value, setValue] = useState("");
 
-  // on utilise le dispatch centralisé "TodoDispatcherContext"
-  const dispatch = useContext(TodoDispatcherContext);
+  // on utilise useTodoDispatcher pour modifier le state
+  const dispatch = useTodoDispatcher();
 
   // A la frappe du user dans l'input d'Ajout de todo, la valeur est envoyée à "value" (=state local)
   function handleChange(e) {

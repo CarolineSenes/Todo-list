@@ -1,12 +1,14 @@
 // composant similaire à AddTodo.jsx
 
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Button from "./Button";
-import { TodoDispatcherContext } from "../context/TodoContext";
+import { useTodoDispatcher } from "../context/TodoContext";
 
 export default function EditTodo({ todo }) {
   const [value, setValue] = useState(todo.content);
-  const dispatch = useContext(TodoDispatcherContext);
+
+  // on utilise useTodoDispatcher pour modifier le state
+  const dispatch = useTodoDispatcher();
 
   function handleChange(e) {
     const inputValue = e.target.value;
